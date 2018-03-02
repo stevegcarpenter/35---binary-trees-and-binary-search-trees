@@ -1,4 +1,4 @@
-![cf](http://i.imgur.com/7v5ASc8.png) lab 30 - Hash Table Data Structure
+![cf](http://i.imgur.com/7v5ASc8.png) lab 35 - Binary Trees and Binary Search Trees
 ====
 
 ## To Submit this Assignment
