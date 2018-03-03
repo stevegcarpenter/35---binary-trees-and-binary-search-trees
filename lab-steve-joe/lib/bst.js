@@ -22,11 +22,53 @@ bst.BinarySearchTree = class {
     this.root = root;
   }
 
+  insert(node) {
+    // special case of empty bst
+    if (this.root === null)
+      this.root = node;
+    else
+      this._insert(this.root,node);
+  }
+
+  // insert helper
+  _insert(root, node){
+    if (node.value < root.value) {
+      // go left when value < root.value
+      if (!root.left)
+        root.left = node;
+      else
+        this._insert(root.left, node);
+    } else {
+      // go right when value > root.value
+      if (!root.right)
+        root.right = node;
+      else
+        this._insert(root.right, node);
+    }
+  }
+
+  find(value) {
+    return this._find(this.root, value);
+  }
+
+  // find helper
+  _find(root, value){
+    if (!root)
+      return null;
+    else if (root.value === value)
+      return root;
+    else if (root.value < value)
+      return this._find(root.right, value);
+    else
+      return this._find(root.left, value);
+  }
+
   inOrderTraversal(cb) {
     if (!root) return null;
     this._inOrderTraversal(this.root, cb);
   }
 
+  // inOrderTraversal helper
   _inOrderTraversal(root, cb) {
     if (!root) return null;
 
@@ -43,6 +85,7 @@ bst.BinarySearchTree = class {
     this._preOrderTraversal(this.root, cb);
   }
 
+  // preOrderTraversal helper
   _preOrderTraversal(root, cb) {
     if (!root) return null;
 
@@ -59,6 +102,7 @@ bst.BinarySearchTree = class {
     this._postOrderTraversal(this.root, cb);
   }
 
+  // postOrderTraversal helper
   _postOrderTraversal(root, cb) {
     if (!root) return null;
 
