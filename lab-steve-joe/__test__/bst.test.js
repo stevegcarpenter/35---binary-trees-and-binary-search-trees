@@ -75,7 +75,7 @@ describe('BinarySearchTree', function () {
         new TreeNode(7),
       ];
       let bst = new BinarySearchTree();
-      for (node of nodes) {
+      for (let node of nodes) {
         bst.insert(node);
       }
       it('should have correctly built the BinarySearchTree', () => {
@@ -122,7 +122,20 @@ describe('BinarySearchTree', function () {
     });
 
     describe('Invalid', () => {
+      it('should detect an empty BinarySearchTree and return null', () => {
+        let bst = new BinarySearchTree();
+        let values = [];
+        expect(bst.inOrderTraversal(value => values.push(value))).toBeNull();
+        expect(values).toEqual([]);
+      });
 
+      it('should detect a non-function passed in for the callback and throw a TypeError', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        let values = [];
+        /* shut up the linter */
+        values;
+        expect(() => bst.inOrderTraversal('not a function at all')).toThrow('cb must be a function');
+      });
     });
   });
 
