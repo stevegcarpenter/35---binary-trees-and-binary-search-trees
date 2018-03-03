@@ -14,6 +14,11 @@ bst.TreeNode = class {
 
 bst.BinarySearchTree = class {
   constructor(root=null) {
+    if (root && !(root instanceof bst.TreeNode))
+      throw new TypeError('root must be a TreeNode');
+    if (root && typeof root.value !== 'number')
+      throw new TypeError('value on root must be a number');
+
     this.root = root;
   }
 
