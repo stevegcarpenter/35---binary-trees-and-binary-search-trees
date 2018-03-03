@@ -64,20 +64,20 @@ describe('BinarySearchTree', function () {
 
 
   describe('preOrderTraversal', () => {
-    let nodes = [
-      new TreeNode(4),
-      new TreeNode(1),
-      new TreeNode(3),
-      new TreeNode(2),
-      new TreeNode(6),
-      new TreeNode(5),
-      new TreeNode(7),
-    ];
-    let bst = new BinarySearchTree();
-    for (node of nodes) {
-      bst.insert(node);
-    }
     describe('Valid', () => {
+      let nodes = [
+        new TreeNode(4),
+        new TreeNode(1),
+        new TreeNode(3),
+        new TreeNode(2),
+        new TreeNode(6),
+        new TreeNode(5),
+        new TreeNode(7),
+      ];
+      let bst = new BinarySearchTree();
+      for (node of nodes) {
+        bst.insert(node);
+      }
       it('should have correctly built the BinarySearchTree', () => {
         expect(bst.root.value).toEqual(4);
         // left subtree
@@ -100,7 +100,25 @@ describe('BinarySearchTree', function () {
 
   describe('inOrderTraversal', () => {
     describe('Valid', () => {
+      let nodes = [
+        new TreeNode(4),
+        new TreeNode(1),
+        new TreeNode(3),
+        new TreeNode(2),
+        new TreeNode(6),
+        new TreeNode(5),
+        new TreeNode(7),
+      ];
+      let bst = new BinarySearchTree();
+      for (let node of nodes) {
+        bst.insert(node);
+      }
+      let values = [];
+      bst.inOrderTraversal(item => values.push(item));
 
+      it('should push all the values in an in order fashion', () => {
+        expect(values).toEqual([1, 2, 3, 4, 5, 6, 7]);
+      });
     });
 
     describe('Invalid', () => {

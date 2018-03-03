@@ -64,7 +64,10 @@ bst.BinarySearchTree = class {
   }
 
   inOrderTraversal(cb) {
-    if (!root) return null;
+    if (!this.root) return null;
+    if (typeof cb !== 'function')
+      throw new TypeError('cb must be a function');
+
     this._inOrderTraversal(this.root, cb);
   }
 
@@ -73,15 +76,18 @@ bst.BinarySearchTree = class {
     if (!root) return null;
 
     // visit left
-    this._inOrderTraversal(root.left);
+    this._inOrderTraversal(root.left, cb);
     // visit root
-    cb(this.value);
+    cb(root.value);
     // visit right
-    this._inOrderTraversal(root.right);
+    this._inOrderTraversal(root.right, cb);
   }
 
   preOrderTraversal(cb) {
-    if (!root) return null;
+    if (!this.root) return null;
+    if (typeof cb !== 'function')
+      throw new TypeError('cb must be a function');
+
     this._preOrderTraversal(this.root, cb);
   }
 
@@ -90,15 +96,18 @@ bst.BinarySearchTree = class {
     if (!root) return null;
 
     // visit root
-    cb(this.value);
+    cb(root.value);
     // visit left
-    this._preOrderTraversal(root.left);
+    this._preOrderTraversal(root.left, cb);
     // visit right
-    this._preOrderTraversal(root.right);
+    this._preOrderTraversal(root.right, cb);
   }
 
   postOrderTraversal(cb) {
-    if (!root) return null;
+    if (!this.root) return null;
+    if (typeof cb !== 'function')
+      throw new TypeError('cb must be a function');
+
     this._postOrderTraversal(this.root, cb);
   }
 
@@ -107,10 +116,10 @@ bst.BinarySearchTree = class {
     if (!root) return null;
 
     // visit left
-    this._postOrderTraversal(root.left);
+    this._postOrderTraversal(root.left, cb);
     // visit right
-    this._postOrderTraversal(root.right);
+    this._postOrderTraversal(root.right, cb);
     // visit root
-    cb(this.value);
+    cb(root.value);
   }
 };
