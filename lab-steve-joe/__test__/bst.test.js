@@ -62,8 +62,7 @@ describe('BinarySearchTree', function () {
     });
   });
 
-
-  describe('insert', () => {
+  describe('#insert', () => {
     describe('Valid', () => {
 
       // Build the following tree
@@ -129,7 +128,7 @@ describe('BinarySearchTree', function () {
     });
   });
 
-  describe('preOrderTraversal', () => {
+  describe('#preOrderTraversal', () => {
     describe('Valid', () => {
 
       // Build the following tree
@@ -191,7 +190,7 @@ describe('BinarySearchTree', function () {
   });
 
 
-  describe('inOrderTraversal', () => {
+  describe('#inOrderTraversal', () => {
     describe('Valid', () => {
 
       // Build the following tree
@@ -253,7 +252,7 @@ describe('BinarySearchTree', function () {
   });
 
 
-  describe('postOrderTraversal', () => {
+  describe('#postOrderTraversal', () => {
     describe('Valid', () => {
 
       // Build the following tree
@@ -310,6 +309,58 @@ describe('BinarySearchTree', function () {
         /* shut up the linter */
         values;
         expect(() => bst.inOrderTraversal('not a function at all')).toThrow('cb must be a function');
+      });
+    });
+  });
+
+  describe('#find', () => {
+    describe('Valid', () => {
+      // Build the following tree
+      //                       7
+      //
+      //               6
+      //
+      //                       5
+      //
+      //         4
+      //
+      //                       3
+      //
+      //               2
+      //
+      //                       1
+      //
+      let nodes = [
+        new TreeNode(4),
+        new TreeNode(2),
+        new TreeNode(1),
+        new TreeNode(3),
+        new TreeNode(6),
+        new TreeNode(5),
+        new TreeNode(7),
+      ];
+      let bst = new BinarySearchTree();
+      for (let node of nodes) {
+        bst.insert(node);
+      }
+
+      it('should return back the a TreeNode if the value is found', () => {
+        expect(bst.find(4)).toBeInstanceOf(TreeNode);
+      });
+
+      it('should return the correct node', () => {
+        expect(bst.find(5).value).toEqual(5);
+      });
+
+      it('should return null if the node cannot be found', () => {
+        expect(bst.find(100)).toBeNull();
+      });
+    });
+
+    describe('Invalid', () => {
+      it('should detect a non-number and throw a TypeError', () => {
+        let bst = new BinarySearchTree(new TreeNode(10));
+        expect(() => bst.find('not a number')).toThrow('value to find must be a number');
       });
     });
   });
