@@ -11,6 +11,6 @@ let nodes = [
   new TreeNode(7),
 ];
 let bst = new BinarySearchTree();
-for (node of nodes) {
+for (let node of nodes) {
   bst.insert(node);
 }

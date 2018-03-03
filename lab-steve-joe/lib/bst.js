@@ -23,6 +23,10 @@ bst.BinarySearchTree = class {
   }
 
   insert(node) {
+    if (!(node instanceof bst.TreeNode))
+      throw new TypeError('node must be a TreeNode');
+    if (typeof node.value !== 'number')
+      throw new TypeError('node.value must be a number');
     // special case of empty bst
     if (this.root === null)
       this.root = node;
@@ -48,6 +52,9 @@ bst.BinarySearchTree = class {
   }
 
   find(value) {
+    if (typeof value !== 'number')
+      throw new TypeError('value to find must be a number');
+
     return this._find(this.root, value);
   }
 
@@ -64,7 +71,10 @@ bst.BinarySearchTree = class {
   }
 
   inOrderTraversal(cb) {
-    if (!root) return null;
+    if (!this.root) return null;
+    if (typeof cb !== 'function')
+      throw new TypeError('cb must be a function');
+
     this._inOrderTraversal(this.root, cb);
   }
 
@@ -73,15 +83,18 @@ bst.BinarySearchTree = class {
     if (!root) return null;
 
     // visit left
-    this._inOrderTraversal(root.left);
+    this._inOrderTraversal(root.left, cb);
     // visit root
-    cb(this.value);
+    cb(root.value);
     // visit right
-    this._inOrderTraversal(root.right);
+    this._inOrderTraversal(root.right, cb);
   }
 
   preOrderTraversal(cb) {
-    if (!root) return null;
+    if (!this.root) return null;
+    if (typeof cb !== 'function')
+      throw new TypeError('cb must be a function');
+
     this._preOrderTraversal(this.root, cb);
   }
 
@@ -90,15 +103,18 @@ bst.BinarySearchTree = class {
     if (!root) return null;
 
     // visit root
-    cb(this.value);
+    cb(root.value);
     // visit left
-    this._preOrderTraversal(root.left);
+    this._preOrderTraversal(root.left, cb);
     // visit right
-    this._preOrderTraversal(root.right);
+    this._preOrderTraversal(root.right, cb);
   }
 
   postOrderTraversal(cb) {
-    if (!root) return null;
+    if (!this.root) return null;
+    if (typeof cb !== 'function')
+      throw new TypeError('cb must be a function');
+
     this._postOrderTraversal(this.root, cb);
   }
 
@@ -107,10 +123,34 @@ bst.BinarySearchTree = class {
     if (!root) return null;
 
     // visit left
-    this._postOrderTraversal(root.left);
+    this._postOrderTraversal(root.left, cb);
     // visit right
-    this._postOrderTraversal(root.right);
+    this._postOrderTraversal(root.right, cb);
     // visit root
-    cb(this.value);
+    cb(root.value);
+  }
+
+  printTree() {
+    if (!this.root)
+      return;
+
+    this._printTree(this.root, '');
+  }
+
+  // print tree helper function
+  _printTree(root, space) {
+    if (!root) return;
+
+    // Increase distance between levels
+    space += '          ';
+
+    // Process right child first
+    this._printTree(root.right, space);
+
+    // Print current node after space count
+    console.log(`\n${space}${root.value}`);
+
+    // Process left child
+    this._printTree(root.left, space);
   }
 };
