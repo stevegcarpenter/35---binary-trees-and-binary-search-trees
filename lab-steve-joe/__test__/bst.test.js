@@ -63,13 +63,29 @@ describe('BinarySearchTree', function () {
   });
 
 
-  describe('preOrderTraversal', () => {
+  describe('insert', () => {
     describe('Valid', () => {
+
+      // Build the following tree
+      //                       7
+      //
+      //               6
+      //
+      //                       5
+      //
+      //         4
+      //
+      //                       3
+      //
+      //               2
+      //
+      //                       1
+      //
       let nodes = [
         new TreeNode(4),
+        new TreeNode(2),
         new TreeNode(1),
         new TreeNode(3),
-        new TreeNode(2),
         new TreeNode(6),
         new TreeNode(5),
         new TreeNode(7),
@@ -78,13 +94,18 @@ describe('BinarySearchTree', function () {
       for (let node of nodes) {
         bst.insert(node);
       }
-      it('should have correctly built the BinarySearchTree', () => {
+      it('should have set the root value to be 4', () => {
         expect(bst.root.value).toEqual(4);
-        // left subtree
-        expect(bst.root.left.value).toEqual(1);
-        expect(bst.root.left.right.value).toEqual(3);
-        expect(bst.root.left.right.left.value).toEqual(2);
+      });
 
+      it('should have properly built the left subtree', () => {
+        // left subtree
+        expect(bst.root.left.value).toEqual(2);
+        expect(bst.root.left.right.value).toEqual(3);
+        expect(bst.root.left.left.value).toEqual(1);
+      });
+
+      it('should have propertly built the right subtree', () => {
         // right subtree
         expect(bst.root.right.value).toEqual(6);
         expect(bst.root.right.left.value).toEqual(5);
@@ -93,18 +114,106 @@ describe('BinarySearchTree', function () {
     });
 
     describe('Invalid', () => {
+      it('should detect a non-TreeNode value being inserted and throw a TypeError', () => {
+        let bst = new BinarySearchTree();
+        expect(() => bst.insert('not a TreeNode')).toThrow('node must be a TreeNode');
+      });
 
+      it('should throw a TypeError if the nodes value being inserted is not a number', () => {
+        let bst = new BinarySearchTree();
+        let node = new TreeNode(10);
+        // re-assign the value
+        node.value = 'not a number';
+        expect(() => bst.insert(node)).toThrow('node.value must be a number');
+      });
+    });
+  });
+
+  describe('preOrderTraversal', () => {
+    describe('Valid', () => {
+
+      // Build the following tree
+      //                       7
+      //
+      //               6
+      //
+      //                       5
+      //
+      //         4
+      //
+      //                       3
+      //
+      //               2
+      //
+      //                       1
+      //
+      let nodes = [
+        new TreeNode(4),
+        new TreeNode(2),
+        new TreeNode(1),
+        new TreeNode(3),
+        new TreeNode(6),
+        new TreeNode(5),
+        new TreeNode(7),
+      ];
+      let bst = new BinarySearchTree();
+      for (let node of nodes) {
+        bst.insert(node);
+      }
+      let values = [];
+      bst.preOrderTraversal(item => values.push(item));
+
+      it('should push all the values in a PreOrder fashion', () => {
+        expect(values).toEqual([4, 2, 1, 3, 6, 5, 7]);
+      });
+
+      it('should have pushed all items from the BinarySearchTree into the array', () => {
+        expect(nodes.length).toEqual(values.length);
+      });
+    });
+
+    describe('Invalid', () => {
+      it('should detect an empty BinarySearchTree and return null', () => {
+        let bst = new BinarySearchTree();
+        let values = [];
+        expect(bst.inOrderTraversal(value => values.push(value))).toBeNull();
+        expect(values).toEqual([]);
+      });
+
+      it('should detect a non-function passed in for the callback and throw a TypeError', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        let values = [];
+        /* shut up the linter */
+        values;
+        expect(() => bst.inOrderTraversal('not a function at all')).toThrow('cb must be a function');
+      });
     });
   });
 
 
   describe('inOrderTraversal', () => {
     describe('Valid', () => {
+
+      // Build the following tree
+      //                       7
+      //
+      //               6
+      //
+      //                       5
+      //
+      //         4
+      //
+      //                       3
+      //
+      //               2
+      //
+      //                       1
+      //
       let nodes = [
         new TreeNode(4),
+        new TreeNode(2),
         new TreeNode(1),
         new TreeNode(3),
-        new TreeNode(2),
         new TreeNode(6),
         new TreeNode(5),
         new TreeNode(7),
@@ -116,8 +225,12 @@ describe('BinarySearchTree', function () {
       let values = [];
       bst.inOrderTraversal(item => values.push(item));
 
-      it('should push all the values in an in order fashion', () => {
+      it('should push all the values in an InOrder fashion', () => {
         expect(values).toEqual([1, 2, 3, 4, 5, 6, 7]);
+      });
+
+      it('should have pushed all items from the BinarySearchTree into the array', () => {
+        expect(nodes.length).toEqual(values.length);
       });
     });
 
@@ -143,10 +256,61 @@ describe('BinarySearchTree', function () {
   describe('postOrderTraversal', () => {
     describe('Valid', () => {
 
+      // Build the following tree
+      //                       7
+      //
+      //               6
+      //
+      //                       5
+      //
+      //         4
+      //
+      //                       3
+      //
+      //               2
+      //
+      //                       1
+      //
+      let nodes = [
+        new TreeNode(4),
+        new TreeNode(2),
+        new TreeNode(1),
+        new TreeNode(3),
+        new TreeNode(6),
+        new TreeNode(5),
+        new TreeNode(7),
+      ];
+      let bst = new BinarySearchTree();
+      for (let node of nodes) {
+        bst.insert(node);
+      }
+      let values = [];
+      bst.postOrderTraversal(item => values.push(item));
+
+      it('should push all the values in a PostOrder fashion', () => {
+        expect(values).toEqual([1, 3, 2, 5, 7, 6, 4]);
+      });
+
+      it('should have pushed all items from the BinarySearchTree into the array', () => {
+        expect(nodes.length).toEqual(values.length);
+      });
     });
 
     describe('Invalid', () => {
+      it('should detect an empty BinarySearchTree and return null', () => {
+        let bst = new BinarySearchTree();
+        let values = [];
+        expect(bst.inOrderTraversal(value => values.push(value))).toBeNull();
+        expect(values).toEqual([]);
+      });
 
+      it('should detect a non-function passed in for the callback and throw a TypeError', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        let values = [];
+        /* shut up the linter */
+        values;
+        expect(() => bst.inOrderTraversal('not a function at all')).toThrow('cb must be a function');
+      });
     });
   });
 });
