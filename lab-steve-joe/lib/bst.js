@@ -52,6 +52,9 @@ bst.BinarySearchTree = class {
   }
 
   find(value) {
+    if (typeof value !== 'number')
+      throw new TypeError('value to find must be a number');
+
     return this._find(this.root, value);
   }
 
