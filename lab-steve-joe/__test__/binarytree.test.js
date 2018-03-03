@@ -64,8 +64,32 @@ describe('BinarySearchTree', function () {
 
 
   describe('preOrderTraversal', () => {
+    let nodes = [
+      new TreeNode(4),
+      new TreeNode(1),
+      new TreeNode(3),
+      new TreeNode(2),
+      new TreeNode(6),
+      new TreeNode(5),
+      new TreeNode(7),
+    ];
+    let bst = new BinarySearchTree();
+    for (node of nodes) {
+      bst.insert(node);
+    }
     describe('Valid', () => {
+      it('should have correctly built the BinarySearchTree', () => {
+        expect(bst.root.value).toEqual(4);
+        // left subtree
+        expect(bst.root.left.value).toEqual(1);
+        expect(bst.root.left.right.value).toEqual(3);
+        expect(bst.root.left.right.left.value).toEqual(2);
 
+        // right subtree
+        expect(bst.root.right.value).toEqual(6);
+        expect(bst.root.right.left.value).toEqual(5);
+        expect(bst.root.right.right.value).toEqual(7);
+      });
     });
 
     describe('Invalid', () => {
