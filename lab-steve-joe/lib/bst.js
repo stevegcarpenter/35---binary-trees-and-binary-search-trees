@@ -3,15 +3,12 @@
 const bst = module.exports = {};
 
 bst.TreeNode = class {
-  constructor(value, left=null, right=null) {
-    if (left && !(left instanceof bst.TreeNode))
-      throw new TypeError('left argument must be of type TreeNode');
-    if (right && !(right instanceof bst.TreeNode))
-      throw new TypeError('right argument must be of type TreeNode');
+  constructor(value) {
+    if (typeof value !== 'number')
+      throw new TypeError('TreeNode value must be a number');
 
     this.value = value;
-    this.left = left;
-    this.right = right;
+    this.right = this.left = null;
   }
 };
 

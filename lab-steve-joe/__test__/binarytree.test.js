@@ -9,24 +9,20 @@ describe('TreeNode', function() {
         expect(node.value).toEqual(10);
       });
 
-      it('should set both left and right properties to null if not provided a value', () => {
+      it('should set the left child property to null', () => {
         const node = new TreeNode(10);
         expect(node.left).toBeNull();
       });
 
-      it('should set the left and right properties to a tree node if provided', () => {
-        const node = new TreeNode(1, new TreeNode(2), new TreeNode(3));
-        expect(node.left.value).toEqual(2);
-        expect(node.right.value).toEqual(3);
+      it('should set the right child property to null', () => {
+        const node = new TreeNode(10);
+        expect(node.right).toBeNull();
       });
     });
-    describe('Invalid', () => {
-      it('should throw an error if the left child propertie is not a TreeNode', () => {
-        expect(() => new TreeNode(1, 'not a node')).toThrow('left argument must be of type TreeNode');
-      });
 
-      it('should throw an error if the right child propertie is not a TreeNode', () => {
-        expect(() => new TreeNode(1, null, 'not a node')).toThrow('right argument must be of type TreeNode');
+    describe('Invalid', () => {
+      it('should throw a TypeError if the value is not a number', () => {
+        expect(() => new TreeNode('not a number')).toThrow('TreeNode value must be a number');
       });
     });
   });
