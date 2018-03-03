@@ -23,6 +23,10 @@ bst.BinarySearchTree = class {
   }
 
   insert(node) {
+    if (!(node instanceof bst.TreeNode))
+      throw new TypeError('node must be a TreeNode');
+    if (typeof node.value !== 'number')
+      throw new TypeError('node.value must be a number');
     // special case of empty bst
     if (this.root === null)
       this.root = node;
@@ -121,5 +125,29 @@ bst.BinarySearchTree = class {
     this._postOrderTraversal(root.right, cb);
     // visit root
     cb(root.value);
+  }
+
+  printTree() {
+    if (!this.root)
+      return;
+
+    this._printTree(this.root, '');
+  }
+
+  // print tree helper function
+  _printTree(root, space) {
+    if (!root) return;
+
+    // Increase distance between levels
+    space += '          ';
+
+    // Process right child first
+    this._printTree(root.right, space);
+
+    // Print current node after space count
+    console.log(`\n${space}${root.value}`);
+
+    // Process left child
+    this._printTree(root.left, space);
   }
 };
