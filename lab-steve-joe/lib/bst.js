@@ -70,6 +70,80 @@ bst.BinarySearchTree = class {
       return this._find(root.left, value);
   }
 
+  remove(value) {
+    if (typeof value !== 'number')
+      throw new TypeError('value must be a number');
+    // nothing to remove if the tree is empty
+    if (!this.root)
+      return false;
+
+    // edge case: value to remove is the root
+    // use the dummy root approach
+    if (value === this.root.value) {
+      let dummy = new bst.TreeNode(0);
+      // set dummy node as parent of actual root
+      dummy.left = this.root;
+      let retVal = this._remove(this.root, value, dummy);
+      // set new root to the left child of dummy
+      this.root = dummy.left;
+      return retVal;
+    }
+
+    // common case: value to be removed is somewhere in the BST
+    return this._remove(this.root, value);
+  }
+
+  // remove helper function
+  // node: the current node
+  // value: the value to remove
+  // parent: the parent node to the current node
+  _remove(node, value, parent) {
+    // assume success, set false when not possible
+    let retVal = true;
+
+    // first, step is to find the node needing removal
+    switch (true) {
+    case value < node.value:
+      retVal = node.left ? this._remove(node.left, value, node) : false;
+      break;
+    case value > node.value:
+      retVal =node.right ? this._remove(node.right, value, node): false;
+      break;
+    // value === this.value
+    default:
+      // this is the node to remove
+      // Handle the three cases here
+      if (node.left && node.right) {
+        // 1) Node to remove has two children
+        //    a) Find the minimum value in the right subtree
+        //    b) Replace the current nodes value with it (the value to remove)
+        //    c) Remove the minimum from the right subtree
+        node.value = this._findMinimum(node.right);
+        // recurse the right subtree to remove the duplicated value
+        this._remove(node.right, node.value, node);
+      } else if (parent.left === node) {
+        // 2) Node to remove is the left child of parent
+        parent.left = node.left ? node.left : node.right;
+      } else if (parent.right === node) {
+        // 3) Node to remove is the right child of parent
+        parent.right = node.left ? node.left : node.right;
+      }
+      break;
+    }
+
+    return retVal;
+  }
+
+  _findMinimum(node) {
+    if (!node || !(node instanceof bst.TreeNode))
+      throw new TypeError('must have a valid node of type TreeNode');
+
+    // recurse or return the minimum value
+    return node.left
+      ? this._findMinimum(node.left)
+      : node.value;
+  }
+
   inOrderTraversal(cb) {
     if (!this.root) return null;
     if (typeof cb !== 'function')
