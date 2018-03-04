@@ -128,6 +128,283 @@ describe('BinarySearchTree', function () {
     });
   });
 
+  describe('#find', () => {
+    describe('Valid', () => {
+      // Build the following tree
+      //                       7
+      //
+      //               6
+      //
+      //                       5
+      //
+      //         4
+      //
+      //                       3
+      //
+      //               2
+      //
+      //                       1
+      //
+      let nodes = [
+        new TreeNode(4),
+        new TreeNode(2),
+        new TreeNode(1),
+        new TreeNode(3),
+        new TreeNode(6),
+        new TreeNode(5),
+        new TreeNode(7),
+      ];
+      let bst = new BinarySearchTree();
+      for (let node of nodes) {
+        bst.insert(node);
+      }
+
+      it('should return back the a TreeNode if the value is found', () => {
+        expect(bst.find(4)).toBeInstanceOf(TreeNode);
+      });
+
+      it('should return the correct node', () => {
+        expect(bst.find(5).value).toEqual(5);
+      });
+
+      it('should return null if the node cannot be found', () => {
+        expect(bst.find(100)).toBeNull();
+      });
+    });
+
+    describe('Invalid', () => {
+      it('should detect a non-number and throw a TypeError', () => {
+        let bst = new BinarySearchTree(new TreeNode(10));
+        expect(() => bst.find('not a number')).toThrow('value to find must be a number');
+      });
+    });
+  });
+
+  describe('#remove', function () {
+    describe('Valid', () => {
+      it('should find and remove a node properly with no children', () => {
+        // Build the following tree
+        //                       7
+        //
+        //               6
+        //
+        //                       5
+        //
+        //         4
+        //
+        //                       3
+        //
+        //               2
+        //
+        //                       1
+        //
+        let nodes = [
+          new TreeNode(4),
+          new TreeNode(2),
+          new TreeNode(1),
+          new TreeNode(3),
+          new TreeNode(6),
+          new TreeNode(5),
+          new TreeNode(7),
+        ];
+        let bst = new BinarySearchTree();
+        for (let node of nodes) {
+          bst.insert(node);
+        }
+
+        // node should be present before removal
+        expect(bst.root.left.left.value).toEqual(1);
+        bst.remove(1);
+        expect(bst.root.left.left).toBeNull();
+      });
+
+      it('should properly remove a node with one child', () => {
+        // Build the following tree
+        //                       7
+        //
+        //               6
+        //
+        //                       5
+        //
+        //         4
+        //
+        //                       3
+        //
+        //               2
+        //
+        //
+        let nodes = [
+          new TreeNode(4),
+          new TreeNode(2),
+          new TreeNode(3),
+          new TreeNode(6),
+          new TreeNode(5),
+          new TreeNode(7),
+        ];
+        let bst = new BinarySearchTree();
+        for (let node of nodes) {
+          bst.insert(node);
+        }
+
+        // the node should be there before the removal
+        expect(bst.root.left.value).toEqual(2);
+        bst.remove(2);
+        // now the node should be replaced with its child 3
+        expect(bst.root.left.value).toEqual(3);
+      });
+
+      it('should properly remove 6 node and replace it with 5 since 6 has two children', () => {
+        // Build the following tree
+        //                       7
+        //
+        //               6
+        //
+        //                       5
+        //
+        //         4
+        //
+        //                       3
+        //
+        //               2
+        //
+        //                       1
+        //
+        let nodes = [
+          new TreeNode(4),
+          new TreeNode(2),
+          new TreeNode(1),
+          new TreeNode(3),
+          new TreeNode(6),
+          new TreeNode(5),
+          new TreeNode(7),
+        ];
+        let bst = new BinarySearchTree();
+        for (let node of nodes) {
+          bst.insert(node);
+        }
+
+        // 6 should be there initially
+        expect(bst.root.right.value).toEqual(6);
+        bst.remove(6);
+        // Tree should be this now
+        //
+        //
+        //               7
+        //
+        //                       5
+        //
+        //         4
+        //
+        //                       3
+        //
+        //               2
+        //
+        //                       1
+        //
+
+        // where 6 was should now be 7; the smallest value from the right subtree
+        expect(bst.root.right.value).toEqual(7);
+        expect(bst.root.right.left.value).toEqual(5);
+        expect(bst.root.right.right).toBeNull();
+      });
+
+      it('should properly remove the root node by finding the smallest value in the right subtree, replacing it, and removing that duplicate value', () => {
+        // Build the following tree
+        //                       7
+        //
+        //               6
+        //
+        //                       5
+        //
+        //         4
+        //
+        //                       3
+        //
+        //               2
+        //
+        //                       1
+        //
+        let nodes = [
+          new TreeNode(4),
+          new TreeNode(2),
+          new TreeNode(1),
+          new TreeNode(3),
+          new TreeNode(6),
+          new TreeNode(5),
+          new TreeNode(7),
+        ];
+        let bst = new BinarySearchTree();
+        for (let node of nodes) {
+          bst.insert(node);
+        }
+
+        // remove the root node
+        bst.remove(4);
+        // The tree should now look like this
+        //                       7
+        //
+        //               6
+        //
+        //
+        //
+        //         5
+        //
+        //                       3
+        //
+        //               2
+        //
+        //                       1
+        //
+        expect(bst.root.value).toEqual(5);
+        expect(bst.root.right.value).toEqual(6);
+        expect(bst.root.right.right.value).toEqual(7);
+        expect(bst.root.right.left).toBeNull();
+      });
+    });
+
+    describe('Invalid', () => {
+      it('should detect a non-number removal value and throw a TypeError', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        expect(() => bst.remove('not a number')).toThrow('value must be a number');
+      });
+
+      it('should return false if the tree is empty', () => {
+        let bst = new BinarySearchTree();
+        expect(bst.remove(100)).toBeFalsy();
+      });
+    });
+  });
+
+  describe('#_findMinimum', () => {
+    describe('Invalid', () => {
+      it('should return back the minimum value when it is the current node', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        expect(bst._findMinimum(bst.root)).toEqual(100);
+      });
+
+      it('should return the minimum value when it is the left subchild', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        bst.root.left = new TreeNode(99);
+        bst.root.left.left = new TreeNode(98);
+        expect(bst._findMinimum(bst.root)).toEqual(98);
+      });
+    });
+
+    describe('Valid', () => {
+      it('should detect a non-TreeNode passed in and throw a TypeError', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        expect(() => bst._findMinimum('not a TreeNode'))
+          .toThrow('must have a valid node of type TreeNode');
+      });
+
+      it('should detect nothing passed in and throw a TypeError', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        expect(() => bst._findMinimum())
+          .toThrow('must have a valid node of type TreeNode');
+      });
+    });
+  });
+
   describe('#preOrderTraversal', () => {
     describe('Valid', () => {
 
@@ -309,58 +586,6 @@ describe('BinarySearchTree', function () {
         /* shut up the linter */
         values;
         expect(() => bst.inOrderTraversal('not a function at all')).toThrow('cb must be a function');
-      });
-    });
-  });
-
-  describe('#find', () => {
-    describe('Valid', () => {
-      // Build the following tree
-      //                       7
-      //
-      //               6
-      //
-      //                       5
-      //
-      //         4
-      //
-      //                       3
-      //
-      //               2
-      //
-      //                       1
-      //
-      let nodes = [
-        new TreeNode(4),
-        new TreeNode(2),
-        new TreeNode(1),
-        new TreeNode(3),
-        new TreeNode(6),
-        new TreeNode(5),
-        new TreeNode(7),
-      ];
-      let bst = new BinarySearchTree();
-      for (let node of nodes) {
-        bst.insert(node);
-      }
-
-      it('should return back the a TreeNode if the value is found', () => {
-        expect(bst.find(4)).toBeInstanceOf(TreeNode);
-      });
-
-      it('should return the correct node', () => {
-        expect(bst.find(5).value).toEqual(5);
-      });
-
-      it('should return null if the node cannot be found', () => {
-        expect(bst.find(100)).toBeNull();
-      });
-    });
-
-    describe('Invalid', () => {
-      it('should detect a non-number and throw a TypeError', () => {
-        let bst = new BinarySearchTree(new TreeNode(10));
-        expect(() => bst.find('not a number')).toThrow('value to find must be a number');
       });
     });
   });
