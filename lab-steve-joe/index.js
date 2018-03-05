@@ -7,16 +7,15 @@ let nodes = [
   new TreeNode(1),
   new TreeNode(3),
   new TreeNode(6),
-  new TreeNode(5),
   new TreeNode(7),
+  new TreeNode(9),
 ];
 let bst = new BinarySearchTree();
 for (let node of nodes) {
   bst.insert(node);
 }
 
-bst.remove(1);
-bst.printTree();
+bst.isBalanced();
 
 // Build the following tree
 //                       7

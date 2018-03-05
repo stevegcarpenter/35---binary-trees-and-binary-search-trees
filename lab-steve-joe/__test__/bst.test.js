@@ -180,8 +180,14 @@ describe('BinarySearchTree', function () {
     });
   });
 
-  describe('#remove', function () {
+  describe('#remove', () => {
     describe('Valid', () => {
+      it('should return true when it successfully deletes a node', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        expect(bst.remove(100)).toBeTruthy();
+        expect(bst.root).toBeNull();
+      });
+
       it('should find and remove a node properly with no children', () => {
         // Build the following tree
         //                       7
@@ -372,6 +378,11 @@ describe('BinarySearchTree', function () {
         let bst = new BinarySearchTree();
         expect(bst.remove(100)).toBeFalsy();
       });
+
+      it('should return false when an item cannot be removed because it does not exist', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        expect(bst.remove(2)).toBeFalsy();
+      });
     });
   });
 
@@ -401,6 +412,158 @@ describe('BinarySearchTree', function () {
         let bst = new BinarySearchTree(new TreeNode(100));
         expect(() => bst._findMinimum())
           .toThrow('must have a valid node of type TreeNode');
+      });
+    });
+  });
+
+  describe('#isBalanced', () => {
+    describe('Valid', () => {
+      // Build a balanced tree
+      // level difference of 1 === acceptable
+      //                               9
+      //
+      //                       7
+      //
+      //               6
+      //
+      //                       5
+      //
+      //         4
+      //
+      //                       3
+      //
+      //               2
+      //
+      //                       1
+      //
+      let nodes = [
+        new TreeNode(4),
+        new TreeNode(2),
+        new TreeNode(1),
+        new TreeNode(3),
+        new TreeNode(6),
+        new TreeNode(5),
+        new TreeNode(7),
+      ];
+      let bst = new BinarySearchTree();
+      for (let node of nodes) {
+        bst.insert(node);
+      }
+
+      it('should detect a level difference of 0 or 1 and consider the tree balanced', () => {
+        expect(bst.isBalanced()).toBeTruthy();
+      });
+    });
+
+    describe('Invalid', () => {
+      // Build an inbalanced tree
+      // level difference of 3 === inacceptable
+      //
+      //                                        11
+      //
+      //                                9
+      //
+      //                       7
+      //
+      //               6
+      //
+      //
+      //
+      //         4
+      //
+      //                       3
+      //
+      //               2
+      //
+      //                       1
+      //
+
+      let nodes = [
+        new TreeNode(4),
+        new TreeNode(2),
+        new TreeNode(1),
+        new TreeNode(3),
+        new TreeNode(6),
+        new TreeNode(7),
+        new TreeNode(9),
+        new TreeNode(11),
+      ];
+      let bst = new BinarySearchTree();
+      for (let node of nodes) {
+        bst.insert(node);
+      }
+
+      it('should detect a level difference of 2 or more and consider the BST unbalanced', () => {
+        expect(bst.isBalanced()).toBeFalsy();
+      });
+    });
+  });
+
+  describe('#_isBalanced', () => {
+    describe('Valid', () => {
+      it('should populate the info object with the proper deep and shallow level values', () => {
+        // Build an inbalanced tree
+        // level difference of 3 === inacceptable
+        //
+        //                                        11
+        //
+        //                                9
+        //
+        //                       7
+        //
+        //               6
+        //
+        //
+        //
+        //         4
+        //
+        //                       3
+        //
+        //               2
+        //
+        //                       1
+        //
+
+        let nodes = [
+          new TreeNode(4),
+          new TreeNode(2),
+          new TreeNode(1),
+          new TreeNode(3),
+          new TreeNode(6),
+          new TreeNode(7),
+          new TreeNode(9),
+          new TreeNode(11),
+        ];
+        let bst = new BinarySearchTree();
+        for (let node of nodes) {
+          bst.insert(node);
+        }
+        let info = {shallow: Infinity, deep: 1 };
+        bst._isBalanced(bst.root, 1, info);
+        expect(info.shallow).toEqual(2);
+        expect(info.deep).toEqual(5);
+      });
+    });
+
+    describe('Invalid', () => {
+      it('should detect an invalid info object and throw a TypeError', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        expect(() => bst._isBalanced(bst.root, 1, null))
+          .toThrow('info must be a valid object');
+        expect(() => bst._isBalanced(bst.root, 1, 'not an info object'))
+          .toThrow('info must be a valid object');
+      });
+
+      it('should detect a non-number level value and throw a TypeError', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        expect(() => bst._isBalanced(bst.root, 'not a number', {}))
+          .toThrow('level must be a number');
+      });
+
+      it('should detect a level value less then 1 and throw an Error', () => {
+        let bst = new BinarySearchTree(new TreeNode(100));
+        expect(() => bst._isBalanced(bst.root, -1, {}))
+          .toThrow('level must be a value > 1');
       });
     });
   });

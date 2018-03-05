@@ -227,4 +227,39 @@ bst.BinarySearchTree = class {
     // Process left child
     this._printTree(root.left, space);
   }
+
+  isBalanced() {
+    // an empty tree is balanced
+    if (!this.root)
+      return true;
+    let info = {
+      shallow: Infinity,
+      deep: 1
+    };
+
+    this._isBalanced(this.root, 1, info);
+    return (info.deep - info.shallow) <= 1;
+  }
+
+  // isBalanced helper function
+  _isBalanced(node, level, info) {
+    if (!info || typeof info !== 'object')
+      throw new Error('info must be a valid object');
+    if (typeof level !== 'number')
+      throw new TypeError('level must be a number');
+    if (level <= 0)
+      throw new Error('level must be a value > 1');
+
+    if (!node) {
+      if (info.deep < (level - 1))
+        info.deep = level - 1;
+      if ((level - 1) < info.shallow)
+        info.shallow = level - 1;
+
+      return;
+    }
+
+    this._isBalanced(node.left, level + 1, info);
+    this._isBalanced(node.right, level + 1, info);
+  }
 };
