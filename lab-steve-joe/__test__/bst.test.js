@@ -615,7 +615,7 @@ describe('BinarySearchTree', function () {
       it('should detect an empty BinarySearchTree and return null', () => {
         let bst = new BinarySearchTree();
         let values = [];
-        expect(bst.inOrderTraversal(value => values.push(value))).toBeNull();
+        expect(bst.preOrderTraversal(value => values.push(value))).toBeNull();
         expect(values).toEqual([]);
       });
 
@@ -624,7 +624,7 @@ describe('BinarySearchTree', function () {
         let values = [];
         /* shut up the linter */
         values;
-        expect(() => bst.inOrderTraversal('not a function at all')).toThrow('cb must be a function');
+        expect(() => bst.preOrderTraversal('not a function at all')).toThrow('cb must be a function');
       });
     });
   });
@@ -739,7 +739,7 @@ describe('BinarySearchTree', function () {
       it('should detect an empty BinarySearchTree and return null', () => {
         let bst = new BinarySearchTree();
         let values = [];
-        expect(bst.inOrderTraversal(value => values.push(value))).toBeNull();
+        expect(bst.postOrderTraversal(value => values.push(value))).toBeNull();
         expect(values).toEqual([]);
       });
 
@@ -748,7 +748,7 @@ describe('BinarySearchTree', function () {
         let values = [];
         /* shut up the linter */
         values;
-        expect(() => bst.inOrderTraversal('not a function at all')).toThrow('cb must be a function');
+        expect(() => bst.postOrderTraversal('not a function at all')).toThrow('cb must be a function');
       });
     });
   });
