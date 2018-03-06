@@ -8,7 +8,7 @@ let nodes = [
   new TreeNode(3),
   new TreeNode(6),
   new TreeNode(7),
-  new TreeNode(9),
+  new TreeNode(5),
 ];
 let bst = new BinarySearchTree();
 for (let node of nodes) {
